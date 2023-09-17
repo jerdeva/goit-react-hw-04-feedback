@@ -1,55 +1,64 @@
-import { Component } from "react";
+// import { Component, useState } from "react";
 import { Section } from './Section/Section';
 import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
 import { Statistics } from './Statistics/Statistics';
 import { EmptyMessage } from './EmptyMessage/EmptyMessage'
-import {Wrapper} from './Wrapper.styled'
+import { Wrapper } from './Wrapper.styled'
+import {useState} from 'react'
 
 
-// export class App extends Component {
-//     state = {
-//     good: 0,
-//     neutral: 0,
-//     bad: 0,
-//   };
-  
-  
-//   handlerClick = (options) => {
-//     this.setState(prevState => ({
-//          [options]: prevState[options] + 1
-//     }))
+export const App = () => {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+  const options = ['good', 'neutral','bad'] 
 
-//   }
 
-//   countTotalFeedback() {
-//     const { good, neutral, bad } = this.state;
-//     return (good + neutral + bad);
-//   }
+  const  handlerClick = option => {
+  switch (option) {
+    case "good":
+      setGood(good + 1)
+      break;
+    case "bad":
+      setBad(bad + 1)
+      break;
+    case "neutral":
+      setNeutral(neutral+1)
+      break;
+          default: {
+        console.log('There is no such option');
+      }
+  }
 
-//   countPositiveFeedbackPercentage() {
-//     const { good, neutral, bad } = this.state;
-//     const totalFeedback = good + neutral + bad;
-//      return  Math.round((good / totalFeedback) * 100);
+  }
+
+ const countTotalFeedback =() => {
+    return (good + neutral + bad);
+  }
+
+  const  countPositiveFeedbackPercentage =() => {
+    const totalFeedback = good + neutral + bad;
+     return  Math.round((good / totalFeedback) * 100);
 
    
-//   }
+  }
 
-//   render() {
-//     // const { good, neutral, bad } = this.state
-//     // const totalFeedbackClick = good + neutral + bad > 0;
-//     return (
-//  <Wrapper>
-//         <Section title='Please leave feedback'/>
-//         <FeedbackOptions options={["good", "neutral", "bad"]} onLeaveFeedback={this.handlerClick} />
+  const totalFeedbackClick = good + neutral + bad > 0;
+
+
+  return (
+ <Wrapper>
+        <Section title='Please leave feedback'/>
+        <FeedbackOptions options={options} onLeaveFeedback={handlerClick} />
         
-//         <Section title='Statistics'/>
-//           {totalFeedbackClick ? (
-//             <Statistics good={good} neutral={neutral} bad={bad} total={this.countTotalFeedback()} positivePercentage={this.countPositiveFeedbackPercentage()} />
-//             )            
-//           : <EmptyMessage message='There is no feedback'/>
+        <Section title='Statistics'/>
+          {totalFeedbackClick ? (
+            <Statistics good={good} neutral={neutral} bad={bad} total={countTotalFeedback()} positivePercentage={countPositiveFeedbackPercentage()} />
+            )            
+          : <EmptyMessage message='There is no feedback'/>
 
-//         }
-//       </Wrapper>
-//     );
-//   }
-// };
+        }
+      </Wrapper>
+    );
+  
+};
